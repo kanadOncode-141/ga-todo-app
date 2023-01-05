@@ -1,8 +1,8 @@
 name: github Action No.2
 
-no:
+on:
   push:
-    branches:['main']
+    branches: ['main']
 
 jobs:
   build:
@@ -17,4 +17,14 @@ jobs:
       - name: Install Dependencies
         run: npm ci
       - name: Build Project
-        run: npm run build   
+        run: npm run build 
+  deploy:
+    run-on: ubuntu-latest
+    needs: build
+    environment:
+      name: github-pages
+      url: ${{step.deployment.outputs.page_url}}
+    stpes:
+      - name: Deploy to Github pages
+        id: deployment
+        uses: actions/deploy-pages@v1    
